@@ -1,0 +1,235 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nebula Launcher - Minecraft</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Arial', sans-serif;
+      overflow: hidden;
+      cursor: none;
+    }
+    #backgroundImage {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -2;
+    }
+    #nebulaCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+    .content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding-top: 20vh;
+      color: #fff;
+    }
+    h1 {
+      font-size: 4em;
+      text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #ff00de, 0 0 70px #ff00de, 0 0 80px #ff00de, 0 0 100px #ff00de, 0 0 150px #ff00de;
+    }
+    .play-btn {
+      background-color: rgba(76, 175, 80, 0.7);
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
+    }
+    .play-btn:hover {
+      background-color: rgba(69, 160, 73, 0.9);
+      box-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #ff00de, 0 0 70px #ff00de;
+    }
+    #cursor-light {
+      position: fixed;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      pointer-events: none;
+      mix-blend-mode: screen;
+      z-index: 9999;
+    }
+  </style>
+</head>
+<body>
+  <img id="backgroundImage" src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Deep space background with stars and nebulas" width="2070" height="1380">
+  <canvas id="nebulaCanvas"></canvas>
+
+  <div class="content">
+    <h1>Nebula Launcher</h1>
+    <button class="play-btn" onclick="launchMinecraft()">PLAY MINECRAFT</button>
+  </div>
+
+  <div id="cursor-light"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script>
+    // Three.js setup
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('nebulaCanvas'), alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    // Nebula particles
+    const particleCount = 10000;
+    const particleGeometry = new THREE.BufferGeometry();
+    const positions = new Float32Array(particleCount * 3);
+    const colors = new Float32Array(particleCount * 3);
+
+    for (let i = 0; i < particleCount * 3; i += 3) {
+      positions[i] = (Math.random() - 0.5) * 30;
+      positions[i + 1] = (Math.random() - 0.5) * 30;
+      positions[i + 2] = (Math.random() - 0.5) * 30;
+
+      colors[i] = Math.random();
+      colors[i + 1] = Math.random();
+      colors[i + 2] = Math.random();
+    }
+
+    particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    particleGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+    const particleMaterial = new THREE.PointsMaterial({
+      size: 0.05,
+      vertexColors: true,
+      blending: THREE.AdditiveBlending,
+      transparent: true
+    });
+
+    const particleSystem = new THREE.Points(particleGeometry, particleMaterial);
+    scene.add(particleSystem);
+
+    // Nebula clouds
+    const cloudCount = 5;
+    const cloudGeometry = new THREE.SphereGeometry(1, 32, 32);
+    const cloudMaterials = [
+      new THREE.MeshPhongMaterial({
+        color: 0xff00ff,
+        transparent: true,
+        opacity: 0.2,
+        emissive: 0xff00ff,
+        emissiveIntensity: 0.3
+      }),
+      new THREE.MeshPhongMaterial({
+        color: 0x00ffff,
+        transparent: true,
+        opacity: 0.2,
+        emissive: 0x00ffff,
+        emissiveIntensity: 0.3
+      }),
+      new THREE.MeshPhongMaterial({
+        color: 0xffff00,
+        transparent: true,
+        opacity: 0.2,
+        emissive: 0xffff00,
+        emissiveIntensity: 0.3
+      })
+    ];
+
+    const clouds = [];
+    for (let i = 0; i < cloudCount; i++) {
+      const cloud = new THREE.Mesh(cloudGeometry, cloudMaterials[i % cloudMaterials.length]);
+      cloud.position.set(
+        (Math.random() - 0.5) * 20,
+        (Math.random() - 0.5) * 20,
+        (Math.random() - 0.5) * 20
+      );
+      cloud.scale.set(
+        Math.random() * 3 + 2,
+        Math.random() * 3 + 2,
+        Math.random() * 3 + 2
+      );
+      scene.add(cloud);
+      clouds.push(cloud);
+    }
+
+    // Lighting
+    const ambientLight = new THREE.AmbientLight(0x404040);
+    scene.add(ambientLight);
+
+    const pointLight = new THREE.PointLight(0xffffff, 1, 100);
+    pointLight.position.set(0, 0, 10);
+    scene.add(pointLight);
+
+    camera.position.z = 5;
+
+    // Mouse light effect
+    const cursorLight = document.getElementById('cursor-light');
+    let mouseX = 0, mouseY = 0;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      cursorLight.style.left = `${mouseX - 50}px`;
+      cursorLight.style.top = `${mouseY - 50}px`;
+
+      // Update point light position
+      const vector = new THREE.Vector3(
+        (mouseX / window.innerWidth) * 2 - 1,
+        -(mouseY / window.innerHeight) * 2 + 1,
+        0.5
+      );
+      vector.unproject(camera);
+      const dir = vector.sub(camera.position).normalize();
+      const distance = -camera.position.z / dir.z;
+      pointLight.position.copy(camera.position).add(dir.multiplyScalar(distance));
+    });
+
+    // Animation
+    let time = 0;
+    function animate() {
+      requestAnimationFrame(animate);
+      time += 0.001;
+
+      particleSystem.rotation.x += 0.0001;
+      particleSystem.rotation.y += 0.0002;
+
+      clouds.forEach((cloud, index) => {
+        cloud.rotation.x += 0.0003 * (index % 2 ? 1 : -1);
+        cloud.rotation.y += 0.0005 * (index % 2 ? -1 : 1);
+        cloud.position.x = Math.sin(time * (index + 1)) * 5;
+        cloud.position.y = Math.cos(time * (index + 1)) * 5;
+        cloud.position.z = Math.sin(time * (index + 1) * 0.5) * 5;
+      });
+
+      // Update cursor light gradient
+      const gradient = `radial-gradient(circle at center, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%)`;
+      cursorLight.style.background = gradient;
+
+      renderer.render(scene, camera);
+    }
+
+    animate();
+
+    // Resize handler
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    function launchMinecraft() {
+      window.location.href = "minecraft/1.html";
+    }
+  </script>
+</body>
+</html>

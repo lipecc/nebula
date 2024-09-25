@@ -1,0 +1,15 @@
+
+.search-container {
+    text-align: center;
+    margin: 20px 0;
+ }
+ 
+ #search-bar {
+    margin: 0 auto;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 50%;
+    max-width: 400px;
+ }
+ 

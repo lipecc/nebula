@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EaglerCraftX</title>
+    <link rel="icon" type="image/x-icon" href="images/icon.jpeg">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+
+<body>
+    <img id="backgroundImage" src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Deep space background with stars and nebulas" width="2070" height="1380">
+    <canvas id="nebulaCanvas"></canvas>
+
+    <div class="content">
+        <h1>Welcome to EaglerCraftX</h1>
+        <p>Site views counter:</p>
+        <div align='center'><a><img src='https://www.free-website-hit-counter.com/c.php?d=9&id=177632&s=16' border='0' alt='View Counter'></a></div>
+        <p>These clients might be outdated.</p>
+        <p>Have any questions, bug reports or suggestions? Join our Discord server by pressing the button below!</p>
+        <a href="https://discord.gg/czV7M8JXXM" class="dsc-btn" target="_blank">Discord Server</a>
+        <p>Scroll down to the bottom for buttons/links.</p>
+
+        <h2 class="pick-client">Pick a Client:</h2>
+
+        <label for="mobileCheckbox">Mobile Checkbox</label>
+        <input type="checkbox" id="mobileCheckbox">
+        <div class="search-container">
+            <input type="text" id="search-bar" placeholder="Search Clients...">
+        </div>
+
+        <!-- Version 1.9 Section -->
+        <div id="desktopVersion19">
+            <p class="version-text">Version 1.9</p>
+            <div class="Container19">
+                <a class="version-link filter-button" href="./eagler-files/1.9/EaglercraftL_1.9.html"><button>Main 1.9 Client</button></a>
+            </div>
+        </div>
+
+        <div id="mobileVersion19" style="display: none;">
+            <p class="version-text">Version 1.9 - Mobile</p>
+            <div class="mobileContainer19"></div>
+            <a class="version-link filter-button mobile19" href="./eagler-files/mobile/1.9/EaglerMobile/EaglercraftL_1.9.html"><button>EaglerMobile 1.8</button></a>
+            <a class="version-link filter-button mobile19" href="./eagler-files/mobile/1.9/EaglerPocketMobile/EaglercraftL_1.9.html"><button>EaglerPocketMobile 1.8</button></a>
+        </div>
+
+        <!-- Version 1.8 Section -->
+        <div id="desktopVersion18">
+            <p class="version-text">Version 1.8</p>
+            <div class="Container18">
+                <a class="version-link filter-button" href="./eagler-files/1.8/MainClient.html"><button>Main 1.8 Client</button></a>
+                <a class="version-link filter-button" href="./eagler-files/1.8/resent4.0/index.html"><button>Resent 4.0 Client <img src="images/Recomended.png" alt="Recommended" class="recommended"></button></a>
+                <a class="version-link filter-button" href="./eagler-files/1.8/Shadow_Client.html"><button>Shadow Client</button></a>
+                <a class="version-link filter-button" href="./eagler-files/1.8/Astra_Client.html"><button>Astra Client</button></a>
+                <a class="version-link filter-button" href="./eagler-files/1.8/EaglerForge/index.html"><button>EaglerForge</button></a>
+            </div>
+        </div>
+
+        <div id="mobileVersion18" style="display: none;">
+            <p class="version-text">Version 1.8 - Mobile</p>
+            <div class="mobileContainer18">
+                <a class="version-link filter-button mobile18" href="./eagler-files/mobile/1.8/EaglerMobile/MainClient.html"><button>EaglerMobile 1.8</button></a>
+                <a class="version-link filter-button mobile18" href="./eagler-files/mobile/1.8/EaglerPocketMobile/MainClient.html"><button>EaglerPocketMobile 1.8</button></a>
+            </div>
+        </div>
+
+        <!-- Version 1.5.2 Section -->
+        <div id="desktopVersion152">
+            <p class="version-text">Version 1.5.2</p>
+            <div class="Container15">
+                <a class="version-link filter-button" href="./eagler-files/1.5.2/main/index.html"><button>Main 1.5.2 Client</button></a>
+                <a class="version-link filter-button" href="./eagler-files/1.5.2/PrecisionBeta.html"><button>Precision Beta Client</button></a>
+                <a class="version-link filter-button" href="./eagler-files/1.5.2/precisionbeta2/index.html"><button>Precision Beta 2 Client</button></a>
+            </div>
+        </div>
+
+        <div id="mobileVersion152" style="display: none;">
+            <p class="version-text">Version 1.5.2 - Mobile</p>
+            <div class="mobileContainer15">
+                <a class="version-link filter-button" href="./eagler-files/mobile/1.5.2/EaglerMobile/index.html"><button>EaglerMobile 1.5.2</button></a>
+                <a class="version-link filter-button" href="./eagler-files/mobile/1.5.2/EaglerPocketMobile/index.html"><button>EaglerPocketMobile 1.5.2</button></a>
+            </div>
+        </div>
+
+        <h3>DANGER ZONE</h3>
+        <a onclick="openClrModal();" class="clr-btn">Reset All Local Data</a>
+
+        <div id="clr-data-model" class="modal">
+            <div class="modal-content">
+                <h2>DANGER ZONE</h2>
+                <p>Are you sure you want to clear all your local data?</p>
+                <button onclick="localStorage.clear(); location.reload();">Yes</button>
+                <button class="cancel-btn" onclick="closeClrModal()">Cancel</button>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>I am not affiliated with EaglerCraft, Eagtek, Microsoft, or Mojang. I solely host these sites.</p>
+            <a href="https://github.com/eaglercraftx1-8/eaglercraftx1-8.github.io" class="source-btn" target="_blank">Github Repository</a>
+            <a href="https://discord.gg/czV7M8JXXM" class="dsc-btn" target="_blank">Discord Server</a>
+            <a href="https://servers.eaglercraft.com/" target="_blank"><button>Server List</button></a>
+            <a href="https://eaglerrinth.github.io/" target="_blank"><button>EaglerRinth Mod List</button></a>
+        </div>
+    </div>
+
+    <div id="cursor-light"></div>
+
+    <script src="scripts.js"></script>
+</body>
+
+</html>
